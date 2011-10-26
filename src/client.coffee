@@ -55,18 +55,26 @@ class exports.Client
       return cb(err,null,request,body) if err
       @accessToken = payload['access_token']
       cb err,payload,request,body
+  
+  me: (cb) ->
     
+  updateMe: (data,cb) ->
+  
+  createUser: (cb) ->
     
-  ###*
-  Returns infos about the API. 
-  @example
-  curl http://192.168.1.101:3000/v1/info
-  =>
-  {"name":"scottyapp"}
-  ###
-  info: (cb) ->
-    url = "#{@baseUrl}#{@versionPath}/info"
-    @request url,cb
+  updateUser:(data,cb) ->
+  
+  organizationsForUser:(userName,cb) ->
+    
+  organizations: (cb) ->
+    
+  organization: (name,cb) ->
+    
+  updateOrganization: (name,data,cb) ->
+  
+  createOrganization: (name,data,cn) ->
+  
+  deleteOrganization: (name,cb) ->
     
   ###*
   Retrieve the apps for an organization (a user is always it's own organization)
@@ -75,10 +83,10 @@ class exports.Client
   =>
   {"total_count":4,"request_id":"","offset":0,"count":30,"collection":[{"_id":"4e2e746fc2db19107c000006","description":"first project 1","name":"test","slug":"test"},{"_id":"4e3bb63ac2db194f2b000002","description":"Martins test project","name":"test 1","slug":"test-1"},{"_id":"4e3bd46cc2db194f2b00000a","description":"test3","name":"test3","slug":"test3"},{"_id":"4e3cf2edc2db1953c2000002","description":"test4","name":"test4","slug":"test4"}]}
   ###
-  apps: (organizationOrUsername,cb) ->
-    url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
+  appsForOrganization: (organizationName,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps"
     @request url,cb
-
+  
   ###*
   #curl http://192.168.1.101:3000/v1/organizations/martin_sunset/apps -X POST  -H "Authorization: OAuth 22041c80355ec10b82d8aebcd2f8debd0b77b6ff54567fd4e285a722b1ef1e7a" \
   #-F name=testapp \
@@ -86,12 +94,31 @@ class exports.Client
   curl http://192.168.1.101:3000/v1/organizations/martin_sunset/apps -X POST  -H "Authorization: OAuth 22041c80355ec10b82d8aebcd2f8debd0b77b6ff54567fd4e285a722b1ef1e7a" \
   -d '{"name":"anew app","description": "blah"}' 
   =>
-  
+
   ###
   createApp: (organizationOrUsername,name,description,cb) ->
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
     @post url,{name,description},cb
+
+  app: (organizationName,appName,cb) ->
+    
+  updateApp: (organizationName,appName,data,cb) ->
   
+  deleteApp: (organizationName,appName,cb) ->
+
+  ###*
+  Returns infos about the API. 
+  @example
+  curl https://api.scottyapp.com/v1/info
+  =>
+  {"name":"scottyapp","canonicalUrl" : "https://api.scottyapp.com/v1","version" : 1}
+  ###
+  info: (cb) ->
+    url = "#{@baseUrl}#{@versionPath}/info"
+    @request url,cb
+    
+  
+
   
   ###
   # The following two methods curtesy of 
