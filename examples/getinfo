@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+var Client = require('../lib/index').Client,
+    colors = require('colors');
+
+var client = new Client("we don't", "care");
+
+client.info( function(err,body) { console.log(body);});
