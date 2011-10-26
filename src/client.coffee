@@ -50,15 +50,19 @@ class exports.Client
     data.password = password
     
     url = "#{@baseUrl}/oauth/access_token"
-    @post url,data, (err,payload,request,body) =>
+    @_post url,data, (err,payload,request,body) =>
       @accessToken = null #* ensure that it is cleaned up, regardless what happened
       return cb(err,null,request,body) if err
       @accessToken = payload['access_token']
       cb err,payload,request,body
   
   me: (cb) ->
+    url = "#{@baseUrl}#{@versionPath}/me"
+    @_get url,cb
     
   updateMe: (data,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/me"
+    @_put url,data,cb
   
   createUser: (cb) ->
     
@@ -85,7 +89,7 @@ class exports.Client
   ###
   appsForOrganization: (organizationName,cb) ->
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps"
-    @request url,cb
+    @_get url,cb
   
   ###*
   #curl http://192.168.1.101:3000/v1/organizations/martin_sunset/apps -X POST  -H "Authorization: OAuth 22041c80355ec10b82d8aebcd2f8debd0b77b6ff54567fd4e285a722b1ef1e7a" \
@@ -98,7 +102,7 @@ class exports.Client
   ###
   createApp: (organizationOrUsername,name,description,cb) ->
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
-    @post url,{name,description},cb
+    @_post url,{name,description},cb
 
   app: (organizationName,appName,cb) ->
     
@@ -115,7 +119,7 @@ class exports.Client
   ###
   info: (cb) ->
     url = "#{@baseUrl}#{@versionPath}/info"
-    @request url,cb
+    @_get url,cb
     
   
 
@@ -142,32 +146,35 @@ class exports.Client
   ###
 
   # Request API and call callback function with response
-  request : (url, fn = ->) ->
-    headers = 
-      'Content-Type': 'application/x-www-form-urlencoded'
-    headers['Authorization'] = "OAuth #{@acccessToken}" if @accessToken
+  _get : (url, fn = ->) ->
+    @_request(url,"GET",null,null,fn)
+  
+  
+  _post : (url,payload, fn = ->) ->
+    @_request(url,"POST",payload,null,fn)
 
-    xhr
-      url : url
-      headers: headers
-      , (error, request, body) ->
-        return fn(error,null,request,body) if error
-        fn null,(JSON.parse),body,request,body
-  
-  
-  post : (url,payload, fn = ->) ->
+  _put : (url,payload, fn = ->) ->
+    @_request(url,"PUT",payload,null,fn)
+
+  _delete : (url, fn = ->) ->
+    @_request(url,"DELETE",null,null,fn)
+
+  _request : (url,method = "GET",payload,options, fn = ->) ->
     #console.log "URL: #{url}"
     headers = 
       'Content-Type': 'application/x-www-form-urlencoded'
     headers['Authorization'] = "OAuth #{@acccessToken}" if @accessToken
 
+    body = null
+    body = qs.stringify( payload) if payload
+        
     xhr 
       url: url
-      method: 'POST'
-      body: qs.stringify payload 
+      method: method
+      body: body
       headers: headers
       , (error, request, body) ->
         return fn(error,null,request,body) if error
         console.log body
         fn null,JSON.parse(body),request,body
-  
+
