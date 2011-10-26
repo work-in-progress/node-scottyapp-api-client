@@ -64,21 +64,43 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/me"
     @_put url,data,cb
   
-  createUser: (cb) ->
+  createUser: (username,password,email,cb) ->
+    data =
+      username
+      password
+      email
+      
+    url = "#{@baseUrl}#{@versionPath}/users"
+    @_post url,data,cb
     
-  updateUser:(data,cb) ->
+  updateUser:(username,data,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/users/#{username}"
+    @_put url,data,cb
   
   organizationsForUser:(userName,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/users/#{username}/organizations"
+    @_get url,cb
     
   organizations: (cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations"
+    @_get url,cb
     
   organization: (name,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
+    @_get url,cb
     
   updateOrganization: (name,data,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
+    @_put url,data,cb
   
   createOrganization: (name,data,cn) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
+    data.name = name if name
+    @_post url,data,cb
   
   deleteOrganization: (name,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
+    @_delete url,cb
     
   ###*
   Retrieve the apps for an organization (a user is always it's own organization)
@@ -100,15 +122,22 @@ class exports.Client
   =>
 
   ###
-  createApp: (organizationOrUsername,name,description,cb) ->
+  createApp: (organizationOrUsername,name,description,isPrivate = false,cb) ->
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
-    @_post url,{name,description},cb
+    
+    @_post url,{name,description,isPrivate},cb
 
   app: (organizationName,appName,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
+    @_get url,cb
     
   updateApp: (organizationName,appName,data,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
+    @_put url,data,cb
   
   deleteApp: (organizationName,appName,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
+    @_delete url,cb
 
   ###*
   Returns infos about the API. 
