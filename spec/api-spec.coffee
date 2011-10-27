@@ -38,5 +38,29 @@ vows.describe("auth")
         assert.isNull err 
       "THEN it's data must contain a user name": (err,data) ->
         assert.equal data.user_name,"martin_sunset"
+      "THEN it's data must contain a twitter_name": (err,data) ->
+        assert.equal data.twitter_name,"martin_sunset2"
+  .addBatch 
+    "WHEN calling createUser - POST /v1/users": 
+      topic:  () ->
+        client.createUser("ohmyg","apassword12","kim@kardashian.com",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling updateUser - PUT /v1/users/martin_sunset": 
+      topic:  () ->
+        client.updateUser("martin_sunset",{"twitter_name" : "martin_sunset"},@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling organizationsForUser - GET /v1/users/martin_sunset/organizations": 
+      topic:  () ->
+        client.organizationsForUser("martin_sunset",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+        
 
   .export module

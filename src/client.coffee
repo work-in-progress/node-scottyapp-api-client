@@ -66,10 +66,10 @@ class exports.Client
   
   createUser: (username,password,email,cb) ->
     data =
-      username
-      password
-      email
-      
+      username : username
+      password : password
+      email : email
+    
     url = "#{@baseUrl}#{@versionPath}/users"
     @_post url,data,cb
     
@@ -77,7 +77,7 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/users/#{username}"
     @_put url,data,cb
   
-  organizationsForUser:(userName,cb) ->
+  organizationsForUser:(username,cb) ->
     url = "#{@baseUrl}#{@versionPath}/users/#{username}/organizations"
     @_get url,cb
     
@@ -196,12 +196,16 @@ class exports.Client
       'Content-Type': 'application/x-www-form-urlencoded'
     headers['Authorization'] = "OAuth #{@acccessToken}" if @accessToken
 
-    postAsForm = if options? then !!options.postAsForm else false
+    options = {} unless options
+    postAsForm = !!options.postAsForm
     
+    #console.log payload
     body = null    
     body = qs.stringify( payload) if payload && postAsForm
     body = JSON.stringify( payload) if payload && !postAsForm
-        
+    #console.log postAsForm 
+    #console.log body
+    
     xhr 
       url: url
       method: method
