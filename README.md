@@ -1,6 +1,7 @@
 ## About node-scottyapp-api-client
 
-Official node.js API client for scottyapp.com.
+Official node.js API client for scottyapp.com. Documentation will be made available at http://scottyapp.com/developers
+
 
 [![Build Status](https://secure.travis-ci.org/scottyapp/node-scottyapp-api-client.png)](http://travis-ci.org/scottyapp/node-scottyapp-api-client.png)
 
@@ -41,7 +42,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 
 ### 0.0.1
 
-* First version
+* First version - basic api done.
 
 ## Internal Stuff
 
