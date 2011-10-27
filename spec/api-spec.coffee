@@ -96,6 +96,49 @@ vows.describe("auth")
         return
       "THEN it must not fail": (err,data) ->
         assert.isNull err 
+  .addBatch 
+    "WHEN calling appsForOrganization - GET /v1/organizations/martin_sunset/apps": 
+      topic:  () ->
+        client.appsForOrganization("martin_sunset",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling createApp - POST /v1/organizations/martin_sunset/apps": 
+      topic:  () ->
+        client.createApp("martin_sunset","app1","My App",false,@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling app - GET /v1/organizations/martin_sunset/apps/app1": 
+      topic:  () ->
+        client.app("martin_sunset","app1",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling updateApp - PUT /v1/organizations/martin_sunset/apps/app1": 
+      topic:  () ->
+        client.updateApp("martin_sunset","app1",{"description" : "new description"},@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling deleteApp - DELETE /v1/organizations/martin_sunset/apps/app1": 
+      topic:  () ->
+        client.deleteApp("martin_sunset","app1",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+
+  .addBatch 
+    "WHEN calling info - GET /v1/info": 
+      topic:  () ->
+        client.info(@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
         
 
   .export module
