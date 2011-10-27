@@ -93,8 +93,8 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_put url,data,cb
   
-  createOrganization: (name,data,cn) ->
-    url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
+  createOrganization: (name,data,cb) ->
+    url = "#{@baseUrl}#{@versionPath}/organizations"
     data.name = name if name
     @_post url,data,cb
   

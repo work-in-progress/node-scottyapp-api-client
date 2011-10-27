@@ -61,6 +61,41 @@ vows.describe("auth")
         return
       "THEN it must not fail": (err,data) ->
         assert.isNull err 
+  .addBatch 
+    "WHEN calling organizations - GET /v1/organizations": 
+      topic:  () ->
+        client.organizations(@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling organization - GET /v1/organizations/martin_sunset": 
+      topic:  () ->
+        client.organization("martin_sunset",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling updateOrganization - PUT /v1/organizations/martin_sunset": 
+      topic:  () ->
+        client.updateOrganization("martin_sunset",{"description" : "A nice description"},@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling createOrganization - POST /v1/organizations": 
+      topic:  () ->
+        client.createOrganization("org2",{"description" : "Another organization"},@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
+  .addBatch 
+    "WHEN calling deleteOrganization - DELETE /v1/organizations/org2": 
+      topic:  () ->
+        client.deleteOrganization("org2",@callback)
+        return
+      "THEN it must not fail": (err,data) ->
+        assert.isNull err 
         
 
   .export module
