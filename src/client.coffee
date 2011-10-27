@@ -50,7 +50,7 @@ class exports.Client
     data.password = password
     
     url = "#{@baseUrl}/oauth/access_token"
-    @_post url,data, (err,payload,request,body) =>
+    @_postAsForm url,data, (err,payload,request,body) =>
       @accessToken = null #* ensure that it is cleaned up, regardless what happened
       return cb(err,null,request,body) if err
       @accessToken = payload['access_token']
@@ -178,6 +178,8 @@ class exports.Client
   _get : (url, fn = ->) ->
     @_request(url,"GET",null,null,fn)
   
+  _postAsForm : (url,payload, fn = ->) ->
+    @_request(url,"POST",payload,postAsForm:true,fn)
   
   _post : (url,payload, fn = ->) ->
     @_request(url,"POST",payload,null,fn)
@@ -194,8 +196,11 @@ class exports.Client
       'Content-Type': 'application/x-www-form-urlencoded'
     headers['Authorization'] = "OAuth #{@acccessToken}" if @accessToken
 
-    body = null
-    body = qs.stringify( payload) if payload
+    postAsForm = if options? then !!options.postAsForm else false
+    
+    body = null    
+    body = qs.stringify( payload) if payload && postAsForm
+    body = JSON.stringify( payload) if payload && !postAsForm
         
     xhr 
       url: url

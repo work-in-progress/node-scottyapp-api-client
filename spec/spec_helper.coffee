@@ -28,7 +28,7 @@ module.exports =
                 .replyWithFile(200,@fixturePath("info.json"))
                 .get('/v1/me',"")
                 .replyWithFile(200,@fixturePath("me.json"))
-                .put('/v1/me',"")
+                .put('/v1/me',{"twitter_name":"martin_sunset2"})
                 .replyWithFile(200,@fixturePath("me_put.json"))
                 .post('/v1/users',"")
                 .replyWithFile(200,@fixturePath("users_post.json"))
