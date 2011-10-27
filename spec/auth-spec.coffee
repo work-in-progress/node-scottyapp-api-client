@@ -31,12 +31,20 @@ vows.describe("auth")
         assert.equal client.secret,specHelper.secret
       "THEN it's scope must be set": (client) ->
         assert.equal client.scope,"read write"
-        
+
+  .addBatch 
+    "WHEN authenticating token": 
+      topic:  () ->
+        client = specHelper.createClient()
+        client.setAccessToken(specHelper.resultToken)
+        client
+      "THEN it must set the accessToken": (client) ->
+        assert.equal client.accessToken, specHelper.resultToken
   .addBatch 
     "WHEN authenticating with valid credentials": 
       topic:  () ->
-        client = specHelper.createClient()
-        client.authenticate(specHelper.username,specHelper.password,@callback)
+        @client = specHelper.createClient()
+        @client.authenticate(specHelper.username,specHelper.password,@callback)
         return
       "THEN it must not fail": (err,data) ->
         assert.isNull err 
@@ -44,5 +52,7 @@ vows.describe("auth")
         assert.equal data.access_token,specHelper.resultToken 
       "THEN it's data must contain a scope": (err,data) ->
         assert.equal data.scope,"read write"
+      "THEN it must set the accessToken": (client) ->
+        assert.equal @client.accessToken, specHelper.resultToken
 
   .export module
