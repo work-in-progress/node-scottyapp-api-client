@@ -11,6 +11,7 @@ class exports.Client
   ###
   baseUrl : "https://api.scottyapp.com"
   versionPath: "/v1"
+  accessToken: null
   
   ###*
   Initializes a new instance of @see Client
@@ -25,6 +26,7 @@ class exports.Client
   # Use this method or @see authenticate.
   setAccessToken: (accessToken) =>
     @accessToken = accessToken
+    
   ###*
   Authenticates against the API using username and password. 
   This is not a recommended way that only makes sense in 
@@ -83,6 +85,7 @@ class exports.Client
     
   organizations: (cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations"
+    #console.log "HERE #{@accessToken}"
     @_get url,cb
     
   organization: (name,cb) =>
@@ -111,6 +114,7 @@ class exports.Client
   ###
   appsForOrganization: (organizationName,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps"
+    
     @_get url,cb
   
   ###*
@@ -124,7 +128,6 @@ class exports.Client
   ###
   createApp: (organizationOrUsername,name,description,isPrivate = false,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
-    
     @_post url,{name,description,isPrivate},cb
 
   app: (organizationName,appName,cb) =>
@@ -146,33 +149,10 @@ class exports.Client
   =>
   {"name":"scottyapp","canonicalUrl" : "https://api.scottyapp.com/v1","version" : 1}
   ###
-  info: (cb) ->
+  info: (cb) =>
     url = "#{@baseUrl}#{@versionPath}/info"
     @_get url,cb
     
-  
-
-  
-  ###
-  # The following two methods curtesy of 
-  # https://github.com/meritt/node-tumblr/blob/master/src/tumblr.coffee
-  #
-  # Prepare url for API call
-  urlFor : (action, self, options = null) ->
-    params = [
-      @baseUrl
-      self.host + '/' + action                 # blog host and action
-      '/' + options.type if options?.type?     # optional type of post to return
-      '?api_key=' + self.key                   # API key
-    ]
-
-    delete options.type if options?.type?
-
-    query = qs.stringify options
-    params.push '&' + query if query isnt ''   # optional params
-
-    params.join ''
-  ###
 
   # Request API and call callback function with response
   _get : (url, fn = ->) =>
@@ -191,20 +171,25 @@ class exports.Client
     @_request(url,"DELETE",null,null,fn)
 
   _request : (url,method = "GET",payload,options, fn = ->) =>
-    #console.log "URL: #{url}"
-    headers = 
-      'Content-Type': 'application/x-www-form-urlencoded'
-    headers['Authorization'] = "OAuth #{@acccessToken}" if @accessToken
+        
+    headers = {}
+    
+    headers['Authorization'] = "OAuth #{@accessToken}" if @accessToken
 
     options = {} unless options
     postAsForm = !!options.postAsForm
     
-    #console.log payload
     body = null    
+    
     body = qs.stringify( payload) if payload && postAsForm
     body = JSON.stringify( payload) if payload && !postAsForm
-    #console.log postAsForm 
-    #console.log body
+
+    if postAsForm
+      headers['Content-Type'] = 'application/x-www-form-urlencoded'
+    else
+      headers['Content-Type'] = 'application/json'
+    
+    console.log headers
     
     xhr 
       url: url

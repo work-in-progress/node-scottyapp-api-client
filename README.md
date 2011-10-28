@@ -40,6 +40,10 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 
 ## Release Notes
 
+### 0.0.3
+
+* Fixed an even more pathetic token bug
+
 ### 0.0.2
 
 * Fixed some pathetic token bug. 
@@ -55,7 +59,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 # Publish new version
 
 * Change version in package.json
-* git tag -a v0.0.2 -m 'version 0.0.2'
+* git tag -a v0.0.3 -m 'version 0.0.3'
 * git push --tags
 * npm publish
 
