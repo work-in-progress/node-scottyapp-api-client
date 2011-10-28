@@ -23,8 +23,8 @@ class exports.Client
   
   # Sets the access token that was obtained through the oauth2 dance
   # Use this method or @see authenticate.
-  setAccessToken: (@accessToken) ->
-    
+  setAccessToken: (accessToken) =>
+    @accessToken = accessToken
   ###*
   Authenticates against the API using username and password. 
   This is not a recommended way that only makes sense in 
@@ -40,7 +40,7 @@ class exports.Client
   =>
   {"access_token":"b34190d7302a42eb96292c84d175a5a6","scope": "read write"}
   ###
-  authenticate : (username,password,cb) ->
+  authenticate : (username,password,cb) =>
     data = {}
     data.grant_type = 'password'
     data.client_id = @key
@@ -56,15 +56,15 @@ class exports.Client
       @accessToken = payload['access_token']
       cb err,payload,request,body
   
-  me: (cb) ->
+  me: (cb) =>
     url = "#{@baseUrl}#{@versionPath}/me"
     @_get url,cb
     
-  updateMe: (data,cb) ->
+  updateMe: (data,cb) =>
     url = "#{@baseUrl}#{@versionPath}/me"
     @_put url,data,cb
   
-  createUser: (username,password,email,cb) ->
+  createUser: (username,password,email,cb) =>
     data =
       username : username
       password : password
@@ -73,32 +73,32 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/users"
     @_post url,data,cb
     
-  updateUser:(username,data,cb) ->
+  updateUser:(username,data,cb) =>
     url = "#{@baseUrl}#{@versionPath}/users/#{username}"
     @_put url,data,cb
   
-  organizationsForUser:(username,cb) ->
+  organizationsForUser:(username,cb) =>
     url = "#{@baseUrl}#{@versionPath}/users/#{username}/organizations"
     @_get url,cb
     
-  organizations: (cb) ->
+  organizations: (cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations"
     @_get url,cb
     
-  organization: (name,cb) ->
+  organization: (name,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_get url,cb
     
-  updateOrganization: (name,data,cb) ->
+  updateOrganization: (name,data,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_put url,data,cb
   
-  createOrganization: (name,data,cb) ->
+  createOrganization: (name,data,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations"
     data.name = name if name
     @_post url,data,cb
   
-  deleteOrganization: (name,cb) ->
+  deleteOrganization: (name,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_delete url,cb
     
@@ -109,7 +109,7 @@ class exports.Client
   =>
   {"total_count":4,"request_id":"","offset":0,"count":30,"collection":[{"_id":"4e2e746fc2db19107c000006","description":"first project 1","name":"test","slug":"test"},{"_id":"4e3bb63ac2db194f2b000002","description":"Martins test project","name":"test 1","slug":"test-1"},{"_id":"4e3bd46cc2db194f2b00000a","description":"test3","name":"test3","slug":"test3"},{"_id":"4e3cf2edc2db1953c2000002","description":"test4","name":"test4","slug":"test4"}]}
   ###
-  appsForOrganization: (organizationName,cb) ->
+  appsForOrganization: (organizationName,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps"
     @_get url,cb
   
@@ -122,20 +122,20 @@ class exports.Client
   =>
 
   ###
-  createApp: (organizationOrUsername,name,description,isPrivate = false,cb) ->
+  createApp: (organizationOrUsername,name,description,isPrivate = false,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationOrUsername}/apps"
     
     @_post url,{name,description,isPrivate},cb
 
-  app: (organizationName,appName,cb) ->
+  app: (organizationName,appName,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
     @_get url,cb
     
-  updateApp: (organizationName,appName,data,cb) ->
+  updateApp: (organizationName,appName,data,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
     @_put url,data,cb
   
-  deleteApp: (organizationName,appName,cb) ->
+  deleteApp: (organizationName,appName,cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
     @_delete url,cb
 
@@ -175,22 +175,22 @@ class exports.Client
   ###
 
   # Request API and call callback function with response
-  _get : (url, fn = ->) ->
+  _get : (url, fn = ->) =>
     @_request(url,"GET",null,null,fn)
   
-  _postAsForm : (url,payload, fn = ->) ->
+  _postAsForm : (url,payload, fn = ->) =>
     @_request(url,"POST",payload,postAsForm:true,fn)
   
-  _post : (url,payload, fn = ->) ->
+  _post : (url,payload, fn = ->) =>
     @_request(url,"POST",payload,null,fn)
 
-  _put : (url,payload, fn = ->) ->
+  _put : (url,payload, fn = ->) =>
     @_request(url,"PUT",payload,null,fn)
 
-  _delete : (url, fn = ->) ->
+  _delete : (url, fn = ->) =>
     @_request(url,"DELETE",null,null,fn)
 
-  _request : (url,method = "GET",payload,options, fn = ->) ->
+  _request : (url,method = "GET",payload,options, fn = ->) =>
     #console.log "URL: #{url}"
     headers = 
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -213,6 +213,6 @@ class exports.Client
       headers: headers
       , (error, request, body) ->
         return fn(error,null,request,body) if error
-        console.log body
+        #console.log body
         fn null,JSON.parse(body),request,body
 
