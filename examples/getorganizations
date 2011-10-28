@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var Client = require('../lib/index').Client,
+    colors = require('colors');
+
+var client = new Client(process.argv[2], process.argv[3]);
+client.setAccessToken(process.argv[4]);
+
+client.organizations( function(err,body) { console.log(body);});
