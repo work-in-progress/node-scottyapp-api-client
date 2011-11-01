@@ -189,7 +189,7 @@ class exports.Client
     else
       headers['Content-Type'] = 'application/json'
     
-    console.log headers
+    #console.log headers
     
     xhr 
       url: url

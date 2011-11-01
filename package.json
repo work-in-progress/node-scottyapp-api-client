@@ -2,7 +2,7 @@
   "author": "Martin Wawrusch <martin@wawrusch.com> (http://martinatsunset.com)",
   "name": "scottyapp-api-client",
   "description": "Official node.js API client for scottyapp.com. Documentation is available at http://scottyapp.com/developers",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main" : "lib/index.js",
   "repository": {
     "type": "git",

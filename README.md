@@ -59,7 +59,7 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 # Publish new version
 
 * Change version in package.json
-* git tag -a v0.0.3 -m 'version 0.0.3'
+* git tag -a v0.0.4 -m 'version 0.0.4'
 * git push --tags
 * npm publish
 
