@@ -40,6 +40,15 @@ and like us on Facebook please. Every mention is welcome and we follow back.
 
 ## Release Notes
 
+### 0.0.5
+
+* Now checks for response codes from the API and raises an error if it is not in the 2xx range
+* Ensured that data is empty if null, just in case
+
+### 0.0.4
+
+* Removed some logging
+
 ### 0.0.3
 
 * Fixed an even more pathetic token bug

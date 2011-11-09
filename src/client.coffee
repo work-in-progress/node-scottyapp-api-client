@@ -75,7 +75,7 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/users"
     @_post url,data,cb
     
-  updateUser:(username,data,cb) =>
+  updateUser:(username,data = {},cb) =>
     url = "#{@baseUrl}#{@versionPath}/users/#{username}"
     @_put url,data,cb
   
@@ -92,11 +92,11 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_get url,cb
     
-  updateOrganization: (name,data,cb) =>
+  updateOrganization: (name,data= {},cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{name}"
     @_put url,data,cb
   
-  createOrganization: (name,data,cb) =>
+  createOrganization: (name,data= {},cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations"
     data.name = name if name
     @_post url,data,cb
@@ -134,7 +134,7 @@ class exports.Client
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
     @_get url,cb
     
-  updateApp: (organizationName,appName,data,cb) =>
+  updateApp: (organizationName,appName,data= {},cb) =>
     url = "#{@baseUrl}#{@versionPath}/organizations/#{organizationName}/apps/#{appName}"
     @_put url,data,cb
   
@@ -196,8 +196,9 @@ class exports.Client
       method: method
       body: body
       headers: headers
-      , (error, request, body) ->
-        return fn(error,null,request,body) if error
+      , (error, response, body) ->
+        return fn(error,null,response,body) if error
+        return fn(new Error("Received error code #{response.statusCode}"),null,response,body) if response.statusCode < 200 || response.statusCode >= 300
         #console.log body
-        fn null,JSON.parse(body),request,body
+        fn null,JSON.parse(body),response,body
 
